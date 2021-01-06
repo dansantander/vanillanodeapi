@@ -1,4 +1,5 @@
 const products = require('../data/products.json');
+const { writeDataToFile } = require('../utils');
 
 // It's not technically necessary to return promises
 // but we do it in order to respect API's way of working
@@ -17,7 +18,18 @@ function findById(id) {
   })
 }
 
+function create(product) {
+  const id = products.length + 1;
+  const newProduct = {id, ...product};
+  products.push(newProduct);
+  writeDataToFile('./data/products.json', products);
+  return new Promise((resolve, reject)=> {
+    resolve(newProduct);
+  })
+}
+
 module.exports = {
   findAll,
-  findById
+  findById,
+  create
 }

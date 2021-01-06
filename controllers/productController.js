@@ -5,9 +5,9 @@ const Product = require('../models/productModel');
 async function getProducts(req, res) {
   try {
     const products = await Product.findAll();
-
+    // console.log(typeof (products)) => object
     res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(products));
+    res.end(JSON.stringify(products)); // this way we return a json string
   } catch(error) {
     console.log(error);
   }
@@ -31,7 +31,33 @@ async function getProduct(req, res, id) {
   }
 }
 
+// @desc    Creates a Product
+// @route   POST   /api/products
+async function createProduct(req, res) {
+  try {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    }).on('end', async ()=> {
+      const { name, description, price } = JSON.parse(body);
+      const product = {
+        name,
+        description,
+        price
+      }
+  
+      const newProduct = await Product.create(product)
+      res.writeHead(201, {'Content-Type': 'application/json'});
+      return res.end(JSON.stringify(newProduct));
+    })
+
+  } catch(error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getProducts,
-  getProduct
+  getProduct,
+  createProduct
 }

@@ -7,10 +7,11 @@ const http = require('http');
 const products = require('./data/products.json')
 
 // *** setting up server using writeHead
-// response.writeHead() will allow you to set pretty much everything about the response head including status code, content, and multiple headers.
+// response.writeHead() will allow you to set pretty much everything about the response head
+// including status code, content, and multiple headers.
 
 const server = http.createServer((req, res) => {
-  // we only want to render products if we hit /api/products as the route
+  // we only want to render products if we hit '/api/products' as the route
   // and if the request method is GET
   if (req.url === '/api/products' && req.method === 'GET') { 
     res.writeHead(200, {'Content-Type': 'application/json'});
