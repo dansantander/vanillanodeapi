@@ -1,4 +1,4 @@
-const products = require('../data/products.json');
+let products = require('../data/products.json');
 const { writeDataToFile } = require('../utils');
 
 // It's not technically necessary to return promises
@@ -37,9 +37,18 @@ function update(id, product) {
   })
 }
 
+function remove(id) {
+  products = products.filter((p) => p.id !== id)
+  writeDataToFile('./data/products.json', products);
+  return new Promise((resolve, reject)=> {
+    resolve();
+  })
+}
+
 module.exports = {
   findAll,
   findById,
   create,
-  update
+  update,
+  remove
 }
