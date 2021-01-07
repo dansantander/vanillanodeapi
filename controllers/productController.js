@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const { getPostData } = require('../utils');
 
 // @desc    Gets ALL Products
 // @route   GET   /api/products
@@ -33,6 +34,37 @@ async function getProduct(req, res, id) {
 
 // @desc    Creates a Product
 // @route   POST   /api/products
+// Using utls getPostData for setting body
+async function createProduct(req, res) {
+  try {
+      const body = await getPostData(req);
+      const { name, description, price } = JSON.parse(body);
+      const product = {
+        name,
+        description,
+        price
+      }
+  
+      const newProduct = await Product.create(product)
+      res.writeHead(201, {'Content-Type': 'application/json'});
+      return res.end(JSON.stringify(newProduct));
+
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = {
+  getProducts,
+  getProduct,
+  createProduct
+}
+
+/*** ORIGINAL createProduct function */
+//    it grabs data from the request
+//    returns body with data as a string
+//    it assigns name, description and price to body's attributes
+/*
 async function createProduct(req, res) {
   try {
     let body = '';
@@ -55,9 +87,4 @@ async function createProduct(req, res) {
     console.log(error);
   }
 }
-
-module.exports = {
-  getProducts,
-  getProduct,
-  createProduct
-}
+*/
